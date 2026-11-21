@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Network Security MCQs</title>
+<meta name="description" content="200 Network Security MCQs (Lectures 2, 3 & 4) with instant feedback, exam mode, shuffle and saved progress.">
+<style>
+:root{--bg:#0b1220;--panel:#121c2e;--panel2:#17243a;--opt:#101a2a;--text:#eaf0fb;--muted:#9eb0c9;--accent:#62a5ff;--green:#35c98a;--red:#ff667b;--border:#27364e;--okbg:#123127;--badbg:#351d29}
+:root[data-theme=light]{--bg:#f4f7fc;--panel:#fff;--panel2:#eef3fa;--opt:#f8fafd;--text:#14213a;--muted:#5a6a85;--accent:#1f63c9;--green:#14894f;--red:#c9304a;--border:#d6e0ee;--okbg:#e2f6ec;--badbg:#fbe6ea}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,Segoe UI,Arial,sans-serif}
+header{padding:22px 16px 16px;text-align:center;border-bottom:1px solid var(--border);background:var(--panel)}
+h1{font-size:clamp(1.4rem,4vw,2.1rem);margin:0 0 4px}header p{margin:0;color:var(--muted)}
+main{max-width:900px;margin:auto;padding:16px}
+.sticky{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 6px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+select,button{background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:9px 12px;border-radius:10px;font:inherit;font-size:.92rem}
+button{cursor:pointer}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
+.stat{background:var(--panel);border:1px solid var(--border);padding:8px;border-radius:12px;text-align:center}
+.stat b{display:block;font-size:1.15rem}.stat span{color:var(--muted);font-size:.8rem}
+.progress{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden}.progress div{height:100%;width:0;background:var(--accent);transition:width .2s}
+#quiz{display:grid;gap:12px;margin-top:12px}
+.question{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px}
+.qtop{display:flex;justify-content:space-between;color:var(--muted);font-size:.84rem;margin-bottom:6px}
+.question h3{font-size:1rem;margin:0 0 12px}
+.options{display:grid;gap:8px}
+.option{display:flex;gap:9px;text-align:left;width:100%;background:var(--opt);padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+.option .letter{font-weight:700;color:var(--accent);min-width:20px}
+.option.picked{border-color:var(--accent)}
+.option.correct{border-color:var(--green);background:var(--okbg)}
+.option.wrong{border-color:var(--red);background:var(--badbg)}
+.option:disabled{cursor:default;color:var(--text)}
+.feedback{margin-top:9px;font-size:.9rem}.good{color:var(--green)}.bad{color:var(--red)}
+.result{display:none;background:var(--panel);border:1px solid var(--accent);border-radius:14px;padding:16px;text-align:center;margin-top:12px}
+.empty{color:var(--muted);text-align:center;padding:30px}
+footer{text-align:center;color:var(--muted);padding:24px 10px;font-size:.85rem}
+@media(max-width:600px){.stat b{font-size:1rem}.stat span{font-size:.72rem}main{padding:10px}.question{padding:13px}select,button{padding:8px 10px}}
+</style>
+</head>
+<body>
+<header><h1>Network Security MCQs</h1><p>Lectures 2, 3 &amp; 4 · 200 questions · progress saved on this device</p></header>
+<main>
+<div class="sticky">
+<div class="toolbar">
+<select id="filter" aria-label="Lecture"><option value="all">All lectures (200)</option><option value="2">Lecture 2 — OSI Security &amp; Attacks</option><option value="3">Lecture 3 — Cryptography I</option><option value="4">Lecture 4 — Block Modes &amp; Confidentiality</option></select>
+<select id="show" aria-label="Show"><option value="all">All questions</option><option value="unanswered">Unanswered only</option><option value="wrong">My wrong answers</option></select>
+<select id="mode" aria-label="Mode"><option value="instant">Instant feedback</option><option value="exam">Exam mode</option></select>
+<button id="shuffle">Shuffle</button>
+<button id="next">Next unanswered ↓</button>
+<button id="submit" class="primary" style="display:none">Submit exam</button>
+<button id="reset">Reset</button>
+<button id="theme" aria-label="Toggle light/dark theme">◐</button>
+</div>
+<div class="stats">
+<div class="stat"><b id="total">0</b><span>Questions</span></div>
+<div class="stat"><b id="answered">0</b><span>Answered</span></div>
+<div class="stat"><b id="score">0</b><span>Correct</span></div>
+<div class="stat"><b id="percent">0%</b><span>Accuracy</span></div>
+</div>
+<div class="progress"><div id="bar"></div></div>
+</div>
+<div id="result" class="result"></div>
+<div id="quiz"></div>
+</main>
+<footer>Tip: press 1–4 or A–D to answer the question in the middle of the screen · Works offline</footer>
+<script>
+const raw = [
+[2,"Which organization published the X.800 security architecture?",["ISO","IETF","ITU-T","IEEE"],2],
+[2,"X.800 looks at security from how many sides?",["Two","Five","Three","Four"],2],
+[2,"Which of these is NOT one of the three sides of X.800?",["Security mechanism","Security attack","Security protocol","Security service"],2],
+[2,"Any action that compromises the security of an organization's information is called a ...",["security policy","security attack","security service","security mechanism"],1],
+[2,"A process or device that detects, prevents or recovers from an attack is a ...",["security mechanism","security service","security threat","security attack"],0],
+[2,"A service that improves data security by using one or more mechanisms is a ...",["security attack","security vector","security service","security tree"],2],
+[2,"Which of the following is a security service?",["Replay","Authentication","Port scan","Jamming"],1],
+[2,"Which of the following is a security mechanism?",["Traffic analysis","Masquerade","Digital signature","Eavesdropping"],2],
+[2,"Which OSI layer is responsible for routing?",["Data link layer","Transport layer","Session layer","Network layer"],3],
+[2,"SYN flood and port scan are typical attacks on which layer?",["Network layer","Physical layer","Application layer","Transport layer"],3],
+[2,"IP spoofing is mostly linked with the ...",["Session layer","Network layer","Data link layer","Presentation layer"],1],
+[2,"ARP spoofing and sniffing are typical at which layer?",["Application layer","Transport layer","Network layer","Data link layer"],3],
+[2,"Cable tapping and jamming target which layer?",["Data link layer","Session layer","Physical layer","Network layer"],2],
+[2,"Session hijacking belongs to which OSI layer?",["Transport layer","Application layer","Session layer","Presentation layer"],2],
+[2,"SQL injection and phishing are typical attacks at the ...",["Presentation layer","Transport layer","Application layer","Session layer"],2],
+[2,"Weak encryption is the typical risk at which layer?",["Presentation layer","Application layer","Session layer","Network layer"],0],
+[2,"Which tool is used for packet capture in Lab 1?",["Wireshark","OpenSSL","VirtualBox","Kali Linux"],0],
+[2,"Which Pakistani law, named in the lab rules, punishes unauthorized access?",["Companies Act 2017","Telegraph Act 1885","ETO 2002","PECA 2016"],3],
+[2,"The goal of a passive attack is to ...",["delete files","learn information","disrupt a service","change data"],1],
+[2,"The goal of an active attack is to ...",["change data or disrupt service","only guess passwords","only watch traffic","only read data"],0],
+[2,"Which type of attack does NOT change the data?",["Active attack","Masquerade","Replay attack","Passive attack"],3],
+[2,"Which type of attack is very hard to detect?",["Modification","Denial of service","Passive attack","Active attack"],2],
+[2,"The main defense against passive attacks is ...",["detection only","recovery from backups","prevention, such as encryption","rate limiting"],2],
+[2,"The main defense against active attacks is ...",["traffic padding","hiding the traffic","prevention only","detection and recovery"],3],
+[2,"Which of the following is a passive attack?",["Denial of service","Replay","Eavesdropping","Masquerade"],2],
+[2,"Which of these is NOT an active attack?",["Traffic analysis","Replay","Masquerade","Modification of messages"],0],
+[2,"Capturing unencrypted Wi-Fi traffic to read emails is an example of ...",["traffic analysis","replay","masquerade","release of message contents"],3],
+[2,"In traffic analysis, the attacker studies ...",["who talks to whom, how often and how much","the server's software bugs","the secret key","the password file"],0],
+[2,"Traffic analysis is possible even when the data is ...",["deleted","encrypted","unavailable","modified"],1],
+[2,"Which defense helps against traffic analysis?",["Traffic padding","Patching","Digital signature","Timestamps"],0],
+[2,"Encryption is the main defense against which attack?",["Masquerade","Denial of service","Replay","Release of message contents"],3],
+[2,"How many main types of active attacks are listed in the lecture?",["Five","Two","Three","Four"],3],
+[2,"When one entity pretends to be another, the attack is called ...",["modification","masquerade","traffic analysis","replay"],1],
+[2,"A fake login page that looks like the real portal is an example of ...",["eavesdropping","denial of service","masquerade","replay"],2],
+[2,"In a replay attack, the attacker ...",["captures valid data and sends it again later","changes the key","guesses the password","floods the server"],0],
+[2,"Resending a recorded payment request is a ...",["masquerade","passive attack","replay attack","brute force attack"],2],
+[2,"Altering or delaying part of a message is called ...",["masquerade","traffic analysis","replay","modification of messages"],3],
+[2,"Denial of service prevents ...",["normal use of a service","use of encryption","key generation","reading of messages"],0],
+[2,"Flooding a web server so students cannot log in is a ...",["masquerade","traffic analysis","replay","denial of service attack"],3],
+[2,"Masquerade mainly breaks ...",["integrity","privacy","authenticity","availability"],2],
+[2,"A replay attack mainly breaks ...",["confidentiality","integrity","access control","availability"],1],
+[2,"Changing the account number in transit breaks ...",["integrity","access control","availability","confidentiality"],0],
+[2,"Denial of service mainly breaks ...",["confidentiality","availability","integrity","authenticity"],1],
+[2,"Mutual authentication and certificates defend against ...",["denial of service","replay","traffic analysis","masquerade"],3],
+[2,"Timestamps and one-time numbers help stop ...",["eavesdropping","replay attacks","masquerade","DoS attacks"],1],
+[2,"Hashes and digital signatures defend against ...",["denial of service","eavesdropping","traffic analysis","modification of messages"],3],
+[2,"Rate limiting, firewalls and backups are defenses against ...",["denial of service","modification","replay","masquerade"],0],
+[2,"Changing the account number in a message in transit is which attack?",["Traffic analysis","Masquerade","Modification","Replay"],2],
+[2,"The attack surface is ...",["all points where an attacker could try to get in","a type of firewall","the single path an attacker uses","a type of encryption key"],0],
+[2,"The attack vector is ...",["a kind of password","all possible entry points","a defense tool","the specific path used to attack"],3],
+[2,"Which is an example of an attack vector?",["A strong password","A phishing email","A firewall rule","An encrypted backup"],1],
+[2,"Open ports, web forms and USB ports are examples of the ...",["attack surface","attack vector","attack tree","security mechanism"],0],
+[2,"Which action reduces the attack surface?",["Closing unused ports","Giving everyone admin access","Delaying patches","Opening more ports"],0],
+[2,"The root (top) of an attack tree shows ...",["the attacker's goal","the secret key","the firewall","the defense"],0],
+[2,"In the attack tree, MFA and user training defend against ...",["jamming","intercepting traffic","stealing a password","exploiting the server"],2],
+[2,"Which defense is suggested against sniffing open Wi-Fi?",["MFA","Patching","Encryption (TLS)","Backups"],2],
+[2,"Patching and a firewall help against ...",["sniffing Wi-Fi","phishing","exploiting a server bug","guessing passwords"],2],
+[2,"In the network security model, the opponent ...",["shares the secret key","routes the packets","encrypts the message","reads or alters messages"],3],
+[2,"The trusted third party in the model helps with ...",["sharing the secret key","reading the traffic","breaking the cipher","jamming the channel"],0],
+[2,"How many tasks are listed for designing a secure service?",["Five","Four","Six","Three"],1],
+[2,"Building a security transformation that an opponent cannot defeat is the task of ...",["designing an algorithm","generating a log","specifying a protocol","distributing the secret"],0],
+[2,"Creating the keys used by the algorithm is called ...",["generating secret information","specifying a protocol","designing an algorithm","distributing the secret"],0],
+[2,"Developing methods to share the secret safely is called ...",["designing an algorithm","generating secret information","specifying a protocol","distributing the secret"],3],
+[2,"Defining the exact steps both sides follow is called ...",["distributing the secret","generating secret information","specifying a protocol","designing an algorithm"],2],
+[2,"In the network access security model, the gatekeeper function is the ...",["first line of defense","key server","last line of defense","backup system"],0],
+[2,"Internal security controls work ...",["only on the sender side","before the user logs in","after access is granted","only during encryption"],2],
+[2,"In the campus analogy, internal controls are like ...",["the guard at the gate","cameras and logs inside the building","the visitor's pass","the campus map"],1],
+
+[3,"Cryptography is the science of ...",["breaking codes without the key","building faster networks","storing data on disk","making information unreadable to outsiders using a secret"],3],
+[3,"Cryptanalysis is the science of ...",["scrambling data with a key","reading data without knowing the secret","sharing keys safely","generating random keys"],1],
+[3,"Which term covers both code making and code breaking?",["Steganography","Cryptography","Cryptology","Cryptanalysis"],2],
+[3,"The original readable message is called ...",["ciphertext","cipher","plaintext","key"],2],
+[3,"The scrambled, unreadable message is the ...",["plaintext","ciphertext","key","cipher"],1],
+[3,"Turning plaintext into ciphertext is called ...",["hashing","decryption","encryption","cryptanalysis"],2],
+[3,"Turning ciphertext back into plaintext is called ...",["encryption","decryption","hashing","padding"],1],
+[3,"The secret value that controls encryption is the ...",["plaintext","cipher","key","block"],2],
+[3,"The algorithm used to encrypt is called the ...",["key","cipher","plaintext","ciphertext"],1],
+[3,"When HELLO becomes KHOOR, the key is ...",["3","5","13","23"],0],
+[3,"Symmetric encryption uses ...",["a hash value","no key at all","a public key and a private key","the same key for encryption and decryption"],3],
+[3,"Symmetric encryption needs a strong algorithm and ...",["a very long message","a third-party firewall","a public directory","a secret key shared by both sides"],3],
+[3,"Kerckhoffs principle says security should depend only on ...",["the secrecy of the key","the speed of the network","the secrecy of the algorithm","the length of the message"],0],
+[3,"Brute force attack means ...",["trying every possible key","guessing the algorithm","studying cipher structure","using letter frequency"],0],
+[3,"Brute force mostly needs ...",["a known plaintext","time, not cleverness","a trusted third party","knowledge of cipher structure"],1],
+[3,"If the attacker knows only the ciphertext, it is a ...",["ciphertext-only attack","known-plaintext attack","chosen-plaintext attack","replay attack"],0],
+[3,"An attacker who has some plaintext and its ciphertext is doing a ...",["replay attack","chosen-plaintext attack","ciphertext-only attack","known-plaintext attack"],3],
+[3,"An attacker who can encrypt text of their choice is doing a ...",["masquerade attack","known-plaintext attack","ciphertext-only attack","chosen-plaintext attack"],3],
+[3,"Replacing each letter with another letter or symbol is ...",["hashing","padding","substitution","transposition"],2],
+[3,"Rearranging the positions of letters is ...",["hashing","substitution","padding","transposition"],3],
+[3,"The Caesar cipher is a type of ...",["block cipher","transposition cipher","public-key cipher","substitution cipher"],3],
+[3,"The rail fence cipher is a ...",["Vigenere cipher","transposition cipher","monoalphabetic cipher","substitution cipher"],1],
+[3,"In C = (P + k) mod 26, the letter k is the ...",["shift","block size","ciphertext","key stream"],0],
+[3,"With k = 3, HELLO becomes ...",["IFMMP","KHPPR","KHOOR","JGNNQ"],2],
+[3,"How many useful keys does the Caesar cipher have?",["24","25","26","50"],1],
+[3,"Why is the Caesar cipher weak?",["It works on blocks","It needs a trusted party","It uses a long key","It has only 25 useful keys"],3],
+[3,"A monoalphabetic cipher has how many possible keys?",["26!","26","52","2^26"],0],
+[3,"A monoalphabetic cipher can still be broken using ...",["frequency analysis","a bigger block","padding","a longer IV"],0],
+[3,"Which letters are most common in English?",["B, C, D, F","E, T, A, O","K, W, V, Y","Z, Q, X, J"],1],
+[3,"In a long ciphertext, the most common letter likely stands for ...",["E","Q","Z","J"],0],
+[3,"Frequency analysis works better on ...",["longer messages","very short messages","one-letter messages","encrypted images only"],0],
+[3,"The Vigenere cipher uses a ...",["hash value","public key","single number only","keyword"],3],
+[3,"In Vigenere, each key letter gives a ...",["hash","Caesar shift","block","nonce"],1],
+[3,"In Vigenere, the key letter K stands for a shift of ...",["4","9","10","11"],2],
+[3,"In Vigenere, the key letter Y stands for a shift of ...",["23","24","25","26"],1],
+[3,"Vigenere is harder to break than Caesar because ...",["the same plaintext letter can become different ciphertext letters","it has fewer keys","it uses blocks","it uses no key"],0],
+[3,"Caesar encryption of SECURE with k = 3 gives ...",["VHFXUH","VGFXUH","UGEWTG","VHFWUH"],0],
+[3,"Decrypt WKLV LV IXQ (Caesar, k = 3).",["THIS IS RUN","THIS IS FUN","SGHR HR EVM","UJKU KU HWP"],1],
+[3,"Encrypt HELP with the Vigenere key AB.",["IFLQ","HELQ","HFLQ","HFLP"],2],
+[3,"The rail fence (2 rails) ciphertext of WEARESAFE is ...",["WEAREAFSE","WAEAEERSF","WAEEARSFE","EWRASAEFE"],1],
+[3,"Block ciphers encrypt data in ...",["fixed-size blocks","random sizes","whole files at once","single bits only"],0],
+[3,"Stream ciphers encrypt ...",["only images","only text files","bit by bit or byte by byte","in 128-bit blocks only"],2],
+[3,"Confusion in a cipher means ...",["hiding the link between the key and ciphertext","spreading plaintext changes across ciphertext","using shorter keys","repeating blocks"],0],
+[3,"Diffusion means ...",["the algorithm is secret","the blocks are padded","one plaintext change spreads over the ciphertext","the key is hidden"],2],
+[3,"DES was adopted in ...",["1965","1977","1998","2001"],1],
+[3,"DES uses which structure?",["Feistel","Vernam","Caesar","Rijndael"],0],
+[3,"How many rounds does DES have?",["10","14","16","48"],2],
+[3,"DES block size is ...",["56 bits","64 bits","128 bits","192 bits"],1],
+[3,"DES key size is ...",["56 bits","64 bits","128 bits","168 bits"],0],
+[3,"DES was replaced mainly because ...",["its 56-bit key is too short","it used no rounds","it was never standardized","its block was too large"],0],
+[3,"In 1998, a custom machine broke DES in ...",["a few centuries","a few years","a few days","a few seconds"],2],
+[3,"Triple DES applies DES ...",["twice","once with a longer key","three times","sixteen times"],2],
+[3,"The current status of 3DES is ...",["never used","legacy and being phased out","unbroken and recommended","current standard"],1],
+[3,"AES was chosen by ...",["NIST in 2001","IEEE in 1977","ITU-T in 1998","NSA in 1990"],0],
+[3,"AES was originally called ...",["Twofish","Blowfish","Lucifer","Rijndael"],3],
+[3,"AES block size is ...",["56 bits","64 bits","128 bits","256 bits"],2],
+[3,"AES supports key sizes of ...",["40 or 56 bits","56 or 112 bits","64 or 128 bits","128, 192 or 256 bits"],3],
+[3,"AES with a 128-bit key uses how many rounds?",["10","12","14","16"],0],
+[3,"AES with a 256-bit key uses how many rounds?",["10","12","14","16"],2],
+[3,"Which AES step substitutes bytes?",["ShiftRows","AddRoundKey","MixColumns","SubBytes"],3],
+[3,"Which AES step adds the round key?",["ShiftRows","SubBytes","AddRoundKey","MixColumns"],2],
+[3,"AES is trusted because ...",["it was built in 1977","no practical attack is known against full AES","it has 16 rounds","its key is only 56 bits"],1],
+[3,"The 48 rounds in 3DES come from ...",["4 x 12 rounds","3 x 10 rounds","2 x 24 rounds","3 x 16 rounds of DES"],3],
+[3,"The biggest problem of symmetric encryption is ...",["large ciphertext","choosing the plaintext","slow encryption","sharing the key safely"],3],
+[3,"For n people where every pair needs its own key, the total keys are ...",["n(n-1)/2","n + 1","n squared","2n"],0],
+[3,"For 10 people, how many pairwise keys are needed?",["10","45","90","100"],1],
+[3,"For 100 people, how many pairwise keys are needed?",["100","4,950","9,900","10,000"],1],
+
+[4,"A mode of operation is needed because ...",["AES has no key","keys are too short","blocks cannot be XORed","messages are longer than one cipher block"],3],
+[4,"AES handles one block of ...",["56 bits","64 bits","128 bits","256 bytes"],2],
+[4,"A mode of operation defines ...",["how to hash a password","how to generate public keys","how to route packets","how to split and chain blocks of a long message"],3],
+[4,"A block is ...",["the secret key","a random starting value","a fixed-size chunk the cipher handles","the final ciphertext"],2],
+[4,"Extra bytes added to fill the last block are called ...",["padding","nonce","salt","IV"],0],
+[4,"With 16-byte blocks, a 20-byte message is padded to ...",["20 bytes","24 bytes","32 bytes","36 bytes"],2],
+[4,"An IV is ...",["a type of cipher","the ciphertext","a secret key","a random starting value that is not secret"],3],
+[4,"Is the IV kept secret?",["Yes, always","Yes, only in CBC","No, it is never sent","No, it is sent with the data"],3],
+[4,"A nonce is a value that ...",["must be kept secret","must never repeat with the same key","is always zero","is the same for all users"],1],
+[4,"How long is a typical IV for AES?",["8 random bytes","16 random bytes","32 random bytes","64 random bytes"],1],
+[4,"ECB stands for ...",["Encrypted Chain Block","Electronic Codebook","Electronic Cipher Binding","Extended Cipher Base"],1],
+[4,"In ECB, each block is encrypted ...",["separately with the same key","using a new random IV","after XOR with the previous block","with a counter"],0],
+[4,"The main weakness of ECB is that ...",["it is too slow","it cannot be decrypted","it needs an IV","identical plaintext blocks give identical ciphertext blocks"],3],
+[4,"Encrypting an image in ECB mode ...",["still shows the outline of the image","turns it into text","completely hides every pattern","doubles its size"],0],
+[4,"Should ECB be used for real data?",["Only with a short key","Yes, for long files","No, it leaks patterns","Yes, it is the safest"],2],
+[4,"CBC stands for ...",["Chained Binary Code","Cipher Block Chaining","Coded Block Cipher","Cipher Byte Counter"],1],
+[4,"In CBC, each plaintext block is XORed with ...",["the counter","the previous ciphertext block","the next plaintext block","the key"],1],
+[4,"The first block in CBC uses ...",["the previous key","a random IV","the padding","a zero counter only"],1],
+[4,"A drawback of CBC encryption is that it is ...",["fully parallel","sequential and slow","unable to hide patterns","free of padding"],1],
+[4,"In CBC, a single bit error ...",["stays in that bit only","has no effect","ruins the whole file","spoils the next block too"],3],
+[4,"In CBC, identical plaintext blocks look ...",["different","empty","like plaintext","the same"],0],
+[4,"CFB stands for ...",["Chained Feedback Block","Cipher Feedback","Counter Feedback","Cipher Final Block"],1],
+[4,"OFB stands for ...",["Open Feedback Block","Offset Feedback","Overflow Block","Output Feedback"],3],
+[4,"CFB and OFB turn a block cipher into a ...",["stream cipher","hash function","signature scheme","public-key system"],0],
+[4,"In CFB, an error spreads to ...",["the key","no other block","the next block","the whole file"],2],
+[4,"In OFB, a bit error ...",["stays in one place","changes the key","spoils the whole file","spreads to the next block"],0],
+[4,"CFB encrypts the previous ciphertext and then ...",["adds a counter","pads it","discards it","XORs the result with the plaintext"],3],
+[4,"OFB creates a key stream by encrypting ...",["the padding","the previous plaintext block","a feedback value","the plaintext directly"],2],
+[4,"CTR stands for ...",["Cipher Text Return","Code Transfer Ring","Chain Table Result","Counter"],3],
+[4,"In CTR, what is encrypted to make the key stream?",["The plaintext","The previous plaintext block","A counter value","The padding"],2],
+[4,"In CTR, the counter goes up by ...",["0 always","1 for each block","2 per file","16 for each message"],1],
+[4,"Which statement about CTR is wrong?",["Its counter must not repeat","It works in parallel","It is fast","It needs padding"],3],
+[4,"If a counter repeats with the same key in CTR, ...",["security is lost","the file gets padded","the speed doubles","nothing happens"],0],
+[4,"Which two modes need padding?",["OFB and CFB","ECB and CBC","CFB and CTR","CTR and OFB"],1],
+[4,"Which mode does NOT hide patterns?",["CBC","ECB","CTR","CFB"],1],
+[4,"Besides ECB, which mode works in parallel for both encryption and decryption?",["CTR","CFB","CBC","OFB"],0],
+[4,"CBC can be run in parallel only for ...",["both directions","decryption","encryption","neither direction"],1],
+[4,"Which mode cannot run in parallel at all in the comparison table?",["ECB","CBC","CTR","OFB"],3],
+[4,"Which mode needs a counter that never repeats?",["CBC","ECB","CTR","OFB"],2],
+[4,"Which of these is a good choice of mode?",["CTR with a fixed counter","CBC or CTR with a random IV or nonce","ECB with a long key","CBC with a fixed IV"],1],
+[4,"GCM is an example of an ...",["hash function","padding scheme","authenticated mode","key exchange"],2],
+[4,"An authenticated mode like GCM also ...",["needs no key","compresses data","detects tampering","removes the key"],2],
+[4,"Which is a common mistake when using block ciphers?",["Using ECB","Using a random IV","Using GCM","Using a fresh nonce"],0],
+[4,"Reusing an IV or nonce is ...",["harmless","recommended","required by CBC","a serious mistake"],3],
+[4,"Which assumption is a common mistake?",["IVs should be random","GCM detects tampering","Encryption alone stops data modification","Keys must be secret"],2],
+[4,"In Lab 2, the same file encrypts differently each time because of ...",["a changing key length","the file size","a broken cipher","a random salt and IV"],3],
+[4,"Which tool is used in Lab 2?",["OpenSSL","Wireshark","VirtualBox","Nmap"],0],
+[4,"Which option in the OpenSSL command decrypts a file?",["-in","-d","-out","-e"],1],
+[4,"The command openssl enc -aes-256-cbc uses which mode?",["ECB","CTR","OFB","CBC"],3],
+[4,"What is 1010 XOR 0110?",["0011","0110","1100","1110"],2],
+[4,"What is 1100 XOR 1010?",["0100","0110","1010","1110"],1],
+[4,"In the CBC example, P1 = 1010 and IV = 0110. What is P1 XOR IV?",["0000","0110","1010","1100"],3],
+[4,"In CBC, the second plaintext block P2 is XORed with ...",["the key","C1","the IV","P1"],1],
+[4,"In CBC, the second ciphertext block C2 depends on ...",["only the key","C1","nothing else","only P3"],1],
+[4,"Why is ECB unsafe for images?",["Same blocks give same ciphertext, so patterns remain","It makes the file too big","It needs no key","It changes pixel colors"],0],
+[4,"Link encryption happens ...",["only at the source","only at the destination","only inside router memory","on each link between nodes"],3],
+[4,"End-to-end encryption happens ...",["only at routers","between source and destination","on every link","only at the ISP"],1],
+[4,"In link encryption, packet headers are ...",["visible","padded only","encrypted","removed"],2],
+[4,"In end-to-end encryption, packet headers are ...",["fully hidden","visible, as routing needs them","deleted","encrypted twice"],1],
+[4,"In link encryption, data in routers is ...",["decrypted at every node","always encrypted","never read","deleted"],0],
+[4,"In end-to-end encryption, data in routers ...",["is padded","stays encrypted","is lost","is decrypted"],1],
+[4,"Link encryption needs one key pair per ...",["message","user pair","link","file"],2],
+[4,"End-to-end encryption needs one key pair per ...",["link","user pair","packet","router"],1],
+[4,"Which method hides traffic patterns better?",["No encryption","ECB mode","End-to-end encryption","Link encryption"],3],
+[4,"Traffic confidentiality tries to hide ...",["the file name","the key length","the algorithm","who talks to whom"],3],
+[4,"Which is a defense for traffic confidentiality?",["Sending dummy traffic","Reusing the IV","Using ECB","Removing padding"],0]
+];
+
+const KEY="nsmcq-v1",labels=["A","B","C","D"],$=id=>document.getElementById(id);
+const quiz=$("quiz"),filter=$("filter"),mode=$("mode"),show=$("show");
+let state={answers:{},submitted:false,order:null,optOrder:{},mode:"instant",filter:"all",theme:null};
+try{Object.assign(state,JSON.parse(localStorage.getItem(KEY))||{})}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
+if(state.theme)document.documentElement.dataset.theme=state.theme;
+mode.value=state.mode;filter.value=state.filter;
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const order=()=>state.order||raw.map((_,i)=>i);
+const opts=id=>state.optOrder[id]||[0,1,2,3];
+const revealed=()=>mode.value==="instant"||state.submitted;
+const inLecture=id=>filter.value==="all"||String(raw[id][0])===filter.value;
+function visible(){return order().filter(id=>{const q=raw[id],a=state.answers[id];
+ if(!inLecture(id))return false;
+ if(show.value==="unanswered")return a===undefined;
+ if(show.value==="wrong")return a!==undefined&&a!==q[3]&&revealed();
+ return true})}
+function card(id,n){
+ const q=raw[id],picked=state.answers[id],rv=revealed(),locked=state.submitted||(rv&&picked!==undefined);
+ const c=document.createElement("section");c.className="question";c.dataset.id=id;c.dataset.n=n;
+ c.innerHTML=`<div class="qtop"><span>#${n} · Q${id+1}</span><span>Lecture ${q[0]}</span></div>`;
+ const h=document.createElement("h3");h.textContent=q[1];c.append(h);
+ const o=document.createElement("div");o.className="options";
+ opts(id).forEach((j,pos)=>{const b=document.createElement("button");b.className="option";b.disabled=locked;
+  b.innerHTML=`<span class="letter">${labels[pos]})</span><span></span>`;b.lastChild.textContent=q[2][j];
+  if(picked===j)b.classList.add("picked");
+  if(rv&&(picked!==undefined||state.submitted)){if(j===q[3])b.classList.add("correct");else if(picked===j)b.classList.add("wrong")}
+  b.onclick=()=>pick(id,j);o.append(b)});
+ c.append(o);
+ if(rv&&(picked!==undefined||state.submitted)){const f=document.createElement("div");const ok=picked===q[3];
+  f.className="feedback "+(ok?"good":"bad");const pos=opts(id).indexOf(q[3]);
+  f.textContent=ok?"✓ Correct":(picked===undefined?"Not answered":"✗ Incorrect")+" — answer: "+labels[pos]+") "+q[2][q[3]];c.append(f)}
+ return c}
+function pick(id,j){if(state.submitted)return;if(state.answers[id]!==undefined&&mode.value==="instant")return;
+ state.answers[id]=j;save();const old=quiz.querySelector(`[data-id="${id}"]`);
+ if(old)old.replaceWith(card(id,+old.dataset.n));stats()}
+function render(){
+ const list=visible();quiz.innerHTML="";
+ if(!list.length)quiz.innerHTML=`<div class="empty">${show.value==="wrong"?"No wrong answers to review 🎉":"Nothing to show here."}</div>`;
+ list.forEach((id,i)=>quiz.append(card(id,i+1)));
+ $("submit").style.display=mode.value==="exam"&&!state.submitted?"inline-block":"none";
+ stats()}
+function stats(){
+ const ids=order().filter(inLecture);
+ const ans=ids.filter(id=>state.answers[id]!==undefined).length,cor=ids.filter(id=>state.answers[id]===raw[id][3]).length,hide=!revealed();
+ $("total").textContent=ids.length;$("answered").textContent=ans;
+ $("score").textContent=hide?"—":cor;$("percent").textContent=hide?"—":(ans?Math.round(cor/ans*100):0)+"%";
+ $("bar").style.width=(ids.length?ans/ids.length*100:0)+"%";
+ const r=$("result");
+ if(state.submitted&&mode.value==="exam"){r.style.display="block";
+  r.innerHTML=`<b style="font-size:1.5rem">${cor} / ${ids.length}</b><br>${Math.round(cor/ids.length*100)}% score · ${ids.length-ans} unanswered<br><button id="rw" style="margin-top:10px">Review wrong answers</button> <button id="again" class="primary" style="margin-top:10px">Try again</button>`;
+  $("rw").onclick=()=>{show.value="wrong";render()};
+  $("again").onclick=()=>{state.answers={};state.submitted=false;save();show.value="all";render();scrollTo(0,0)}}
+ else r.style.display="none"}
+filter.onchange=()=>{state.filter=filter.value;save();render();scrollTo(0,0)};
+show.onchange=render;
+mode.onchange=()=>{state.mode=mode.value;state.submitted=false;save();render()};
+$("submit").onclick=()=>{const left=order().filter(inLecture).filter(id=>state.answers[id]===undefined).length;
+ if(left&&!confirm(left+" questions unanswered. Submit anyway?"))return;state.submitted=true;save();render();scrollTo({top:0,behavior:"smooth"})};
+$("shuffle").onclick=()=>{state.order=shuf(raw.map((_,i)=>i));raw.forEach((_,i)=>state.optOrder[i]=shuf([0,1,2,3]));save();render();scrollTo(0,0)};
+$("reset").onclick=()=>{if(confirm("Reset all answers and question order?")){state.answers={};state.submitted=false;state.order=null;state.optOrder={};save();render();scrollTo(0,0)}};
+$("next").onclick=()=>{const c=[...quiz.querySelectorAll(".question")].find(c=>state.answers[c.dataset.id]===undefined);
+ if(c)c.scrollIntoView({behavior:"smooth",block:"center"});else alert("All shown questions are answered!")};
+$("theme").onclick=()=>{const cur=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=cur;state.theme=cur;save()};
+addEventListener("keydown",e=>{if(e.target.tagName==="SELECT"||e.ctrlKey||e.metaKey||e.altKey)return;const k="1234abcd".indexOf(e.key.toLowerCase());if(k<0)return;
+ const mid=innerHeight/2,c=[...quiz.querySelectorAll(".question")].find(c=>{const r=c.getBoundingClientRect();return r.top<mid&&r.bottom>mid});
+ if(c){const b=c.querySelectorAll(".option")[k%4];if(b&&!b.disabled)b.click()}});
+render();
+</script>
+</body>
+</html>
